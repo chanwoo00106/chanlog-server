@@ -5,6 +5,8 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsUtils
@@ -28,11 +30,11 @@ class SecurityConfig {
       .requestMatchers(HttpMethod.DELETE, "/auth").authenticated()
 
       .requestMatchers(HttpMethod.GET, "/blog").permitAll()
-      .requestMatchers(HttpMethod.POST, "/blog").authenticated()
-      .requestMatchers(HttpMethod.PUT, "/blog").authenticated()
-      .requestMatchers(HttpMethod.DELETE, "/blog").authenticated()
+      .requestMatchers(HttpMethod.POST, "/blog").hasRole("ADMIN")
+      .requestMatchers(HttpMethod.PUT, "/blog").hasRole("ADMIN")
+      .requestMatchers(HttpMethod.DELETE, "/blog").hasRole("ADMIN")
 
-      .requestMatchers(HttpMethod.POST, "/image").authenticated()
+      .requestMatchers(HttpMethod.POST, "/image").hasRole("ADMIN")
 
       .anyRequest().denyAll()
 
@@ -41,4 +43,6 @@ class SecurityConfig {
 
     return http.build()
   }
+
+  fun PasswordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 }
