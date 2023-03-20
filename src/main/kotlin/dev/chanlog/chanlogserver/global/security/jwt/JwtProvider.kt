@@ -12,29 +12,32 @@ import kotlin.collections.HashMap
 
 @Component
 class JwtProvider {
-
   fun parseToken(type: TokenType, token: String): Claims {
-        return try {
-            Jwts.parserBuilder()
-                .setSigningKey(type.getSecret())
-                .build()
-                .parseClaimsJws(token)
-                .body
-        } catch (e: ExpiredJwtException) {
-            throw BasicException(ErrorCode.EXPIRED_TOKEN)
-        } catch (e: Exception) {
-            throw BasicException(ErrorCode.INVALID_TOKEN)
-        }
+    return try {
+      Jwts.parserBuilder()
+        .setSigningKey(type.getSecret())
+        .build()
+        .parseClaimsJws(token)
+        .body
+      } catch (e: ExpiredJwtException) {
+        throw BasicException(ErrorCode.EXPIRED_TOKEN)
+      } catch (e: Exception) {
+        throw BasicException(ErrorCode.INVALID_TOKEN)
+      }
     }
 
-  fun createToken(type: TokenType, payload: Map<String, Any>): String =
-    Jwts.builder()
+  fun createToken(type: TokenType, payload: Map<String, Any>): Token {
+    val expired = Date(System.currentTimeMillis() + type.expired * 1000)
+    val token = Jwts.builder()
       .setHeader(createJwtHeader(type))
       .signWith(type.getSecret(), SignatureAlgorithm.HS256)
       .addClaims(payload)
       .setSubject(type.type)
-      .setExpiration(Date(System.currentTimeMillis() + type.expired * 1000))
+      .setExpiration(expired)
       .compact()
+
+    return Token(token, expired)
+  }
 
   fun createPayload(id: String): Map<String, Any> {
     val payload = HashMap<String, Any>()
