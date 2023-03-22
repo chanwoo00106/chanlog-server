@@ -6,16 +6,25 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
+import java.security.Key
 import java.util.*
 import kotlin.collections.HashMap
 
 @Component
 class JwtProvider {
+  @Value("\${jwt.accessSecret}")
+  private lateinit var accessSecret: String
+  @Value("\${jwt.refreshSecret}")
+  private lateinit var refreshSecret: String
+
   fun parseToken(type: TokenType, token: String): Claims {
     return try {
       Jwts.parserBuilder()
-        .setSigningKey(type.getSecret())
+        .setSigningKey(stringToKey(getSecretKey(type)))
         .build()
         .parseClaimsJws(token)
         .body
@@ -30,7 +39,7 @@ class JwtProvider {
     val expired = Date(System.currentTimeMillis() + type.expired * 1000)
     val token = Jwts.builder()
       .setHeader(createJwtHeader(type))
-      .signWith(type.getSecret(), SignatureAlgorithm.HS256)
+      .signWith(stringToKey(getSecretKey(type)), SignatureAlgorithm.HS256)
       .addClaims(payload)
       .setSubject(type.type)
       .setExpiration(expired)
@@ -53,4 +62,9 @@ class JwtProvider {
 
     return headers
   }
+
+  private fun getSecretKey(type: TokenType): String =
+    if (type.type == "access-token") accessSecret else refreshSecret
+
+  private fun stringToKey(secret: String): Key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
 }
