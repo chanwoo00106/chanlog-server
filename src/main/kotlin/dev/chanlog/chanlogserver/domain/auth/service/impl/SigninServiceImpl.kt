@@ -38,7 +38,7 @@ class SigninServiceImpl(
     refreshRepository.save(Refresh(refreshJwt.token))
 
     val accessToken = createCookie("accessToken", accessJwt)
-    val refreshToken = createCookie("accessToken", refreshJwt)
+    val refreshToken = createCookie("refreshToken", refreshJwt)
 
     return SigninResponseDto(accessToken, refreshToken)
   }
