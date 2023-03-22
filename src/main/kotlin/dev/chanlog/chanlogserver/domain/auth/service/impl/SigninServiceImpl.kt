@@ -2,6 +2,7 @@ package dev.chanlog.chanlogserver.domain.auth.service.impl
 
 import dev.chanlog.chanlogserver.domain.auth.dto.request.SigninRequestDto
 import dev.chanlog.chanlogserver.domain.auth.dto.response.SigninResponseDto
+import dev.chanlog.chanlogserver.domain.auth.entity.Refresh
 import dev.chanlog.chanlogserver.domain.auth.repository.RefreshRepository
 import dev.chanlog.chanlogserver.domain.auth.service.SigninService
 import dev.chanlog.chanlogserver.domain.user.repository.UserRepository
@@ -14,7 +15,6 @@ import jakarta.servlet.http.Cookie
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.Date
 
 @Service
 class SigninServiceImpl(
@@ -34,6 +34,8 @@ class SigninServiceImpl(
     val payload = jwtProvider.createPayload(data.id)
     val accessJwt = jwtProvider.createToken(TokenType.ACCESS, payload)
     val refreshJwt = jwtProvider.createToken(TokenType.REFRESH, payload)
+
+    refreshRepository.save(Refresh(refreshJwt.token))
 
     val accessToken = createCookie("accessToken", accessJwt)
     val refreshToken = createCookie("accessToken", refreshJwt)
