@@ -8,7 +8,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
   datasource:
     url: jdbc:mysql://${DB_URL}/${DB_NAME}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
