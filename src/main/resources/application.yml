@@ -20,3 +20,5 @@ jwt:
   accessSecret: ${ACCESS_SECRET}
   refreshSecret: ${REFRESH_SECRET}
   domain: ${COOKIE_DOMAIN}
+
+environment: ${ENVIRONMENT}

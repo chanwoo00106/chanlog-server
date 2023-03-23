@@ -25,6 +25,9 @@ class SigninServiceImpl(
 ): SigninService {
   @Value("\${jwt.domain}")
   private lateinit var cookieDomain: String
+  @Value("\${environment}")
+  private lateinit var environment: String
+
   override fun execute(data: SigninRequestDto): SigninResponseDto {
     val user = userRepository.findById(data.id).orElse(null) ?: throw BasicException(ErrorCode.FAILED_TOKEN)
 
@@ -47,7 +50,7 @@ class SigninServiceImpl(
     val cookie = Cookie(name, token.token)
     cookie.isHttpOnly = true
     cookie.maxAge = token.expired.time.toInt()
-    cookie.secure = true
+    cookie.secure = environment == "product"
     cookie.path = "/"
     cookie.domain = this.cookieDomain
 
