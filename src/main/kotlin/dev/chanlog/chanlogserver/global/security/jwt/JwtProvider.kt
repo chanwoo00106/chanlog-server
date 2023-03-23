@@ -1,7 +1,7 @@
 package dev.chanlog.chanlogserver.global.security.jwt
 
-import dev.chanlog.chanlogserver.global.security.exception.BasicException
-import dev.chanlog.chanlogserver.global.security.exception.ErrorCode
+import dev.chanlog.chanlogserver.global.exception.BasicException
+import dev.chanlog.chanlogserver.global.exception.ErrorCode
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts

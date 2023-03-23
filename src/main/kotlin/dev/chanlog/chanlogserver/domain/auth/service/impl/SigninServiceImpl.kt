@@ -6,8 +6,8 @@ import dev.chanlog.chanlogserver.domain.auth.entity.Refresh
 import dev.chanlog.chanlogserver.domain.auth.repository.RefreshRepository
 import dev.chanlog.chanlogserver.domain.auth.service.SigninService
 import dev.chanlog.chanlogserver.domain.user.repository.UserRepository
-import dev.chanlog.chanlogserver.global.security.exception.BasicException
-import dev.chanlog.chanlogserver.global.security.exception.ErrorCode
+import dev.chanlog.chanlogserver.global.exception.BasicException
+import dev.chanlog.chanlogserver.global.exception.ErrorCode
 import dev.chanlog.chanlogserver.global.security.jwt.JwtProvider
 import dev.chanlog.chanlogserver.global.security.jwt.Token
 import dev.chanlog.chanlogserver.global.security.jwt.TokenType

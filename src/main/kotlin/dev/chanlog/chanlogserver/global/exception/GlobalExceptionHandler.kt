@@ -1,4 +1,4 @@
-package dev.chanlog.chanlogserver.global.security.exception
+package dev.chanlog.chanlogserver.global.exception
 
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus

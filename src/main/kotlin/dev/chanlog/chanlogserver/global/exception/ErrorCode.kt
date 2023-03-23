@@ -1,4 +1,4 @@
-package dev.chanlog.chanlogserver.global.security.exception
+package dev.chanlog.chanlogserver.global.exception
 
 enum class ErrorCode (val status: Int, val message: String) {
   EXPIRED_TOKEN(403, "토큰 값이 만료되었습니다"),
