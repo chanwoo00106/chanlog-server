@@ -1,4 +1,4 @@
-package dev.chanlog.chanlogserver.global.security.exception
+package dev.chanlog.chanlogserver.global.exception
 
 data class ErrorResponse (
   val status: Int,

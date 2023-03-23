@@ -1,5 +1,6 @@
 package dev.chanlog.chanlogserver.global.security
 
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -14,6 +15,7 @@ import org.springframework.web.cors.CorsUtils
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
+  @Bean
   fun filterChain(http: HttpSecurity): SecurityFilterChain {
     http.cors().and()
       .csrf().disable()
@@ -44,5 +46,6 @@ class SecurityConfig {
     return http.build()
   }
 
+  @Bean
   fun PasswordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 }
