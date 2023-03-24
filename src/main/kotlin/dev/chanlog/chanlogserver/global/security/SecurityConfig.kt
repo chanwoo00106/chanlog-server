@@ -1,14 +1,19 @@
 package dev.chanlog.chanlogserver.global.security
 
+import dev.chanlog.chanlogserver.global.security.auth.provider.AccessAuthenticationProvider
+import dev.chanlog.chanlogserver.global.security.auth.provider.RefreshAuthenticationProvider
+import dev.chanlog.chanlogserver.global.security.filter.JwtFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsUtils
 
@@ -16,7 +21,12 @@ import org.springframework.web.cors.CorsUtils
 @EnableWebSecurity
 class SecurityConfig {
   @Bean
-  fun filterChain(http: HttpSecurity): SecurityFilterChain {
+  fun filterChain(
+    http: HttpSecurity,
+    authenticationManager: AuthenticationManager,
+    accessAuthenticationProvider: AccessAuthenticationProvider,
+    refreshAuthenticationProvider: RefreshAuthenticationProvider
+  ): SecurityFilterChain {
     http.cors().and()
       .csrf().disable()
       .formLogin().disable()
@@ -42,6 +52,13 @@ class SecurityConfig {
 
 //    http.exceptionHandling()
 //      .authenticationEntryPoint()
+
+    http
+      .authenticationManager(authenticationManager)
+      .authenticationProvider(accessAuthenticationProvider)
+      .authenticationProvider(refreshAuthenticationProvider)
+
+    http.addFilterBefore(JwtFilter(authenticationManager), UsernamePasswordAuthenticationFilter::class.java)
 
     return http.build()
   }
