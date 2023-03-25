@@ -1,5 +1,6 @@
 package dev.chanlog.chanlogserver.global.security.jwt
 
+import dev.chanlog.chanlogserver.domain.user.Role
 import dev.chanlog.chanlogserver.global.exception.BasicException
 import dev.chanlog.chanlogserver.global.exception.ErrorCode
 import io.jsonwebtoken.Claims
@@ -48,9 +49,10 @@ class JwtProvider {
     return Token(token, expired)
   }
 
-  fun createPayload(id: String): Map<String, Any> {
+  fun createPayload(id: String, role: Role): Map<String, Any> {
     val payload = HashMap<String, Any>()
     payload["id"] = id
+    payload["role"] = role
 
     return payload
   }

@@ -49,8 +49,6 @@ class SecurityConfig {
 
       .requestMatchers(HttpMethod.POST, "/image").hasRole("ADMIN")
 
-      .requestMatchers(HttpMethod.GET, "/test").authenticated()
-
       .anyRequest().denyAll()
 
 //    http.exceptionHandling()

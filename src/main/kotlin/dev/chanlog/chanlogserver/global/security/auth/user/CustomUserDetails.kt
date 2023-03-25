@@ -1,20 +1,19 @@
-package dev.chanlog.chanlogserver.global.security.user
+package dev.chanlog.chanlogserver.global.security.auth.user
 
-import dev.chanlog.chanlogserver.domain.user.entity.User
-import dev.chanlog.chanlogserver.global.security.jwt.JwtProvider
+import dev.chanlog.chanlogserver.domain.user.Role
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class CustomUserDetails(
-  private val user: User,
-  private val jwtProvider: JwtProvider
+  private val username: String,
+  private val role: Role
 ): UserDetails {
   override fun getAuthorities(): MutableCollection<out GrantedAuthority>
-    = mutableListOf(user.role)
+    = mutableListOf(role)
 
-  override fun getPassword(): String = user.password
+  override fun getPassword(): String? = null
 
-  override fun getUsername(): String = user.id
+  override fun getUsername(): String = username
 
   // 토큰이 만료됐는지 확인
   override fun isAccountNonExpired(): Boolean = true
