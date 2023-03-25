@@ -5,5 +5,5 @@ import java.util.Date
 
 data class Token (
   val token: String,
-  val expired: Date
+  val expired: Int
 )
