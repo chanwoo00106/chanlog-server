@@ -17,6 +17,7 @@ import jakarta.servlet.http.Cookie
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.Date
 
 @Service
 class SigninServiceImpl(
@@ -63,7 +64,7 @@ class SigninServiceImpl(
   private fun createCookie(name: String, token: Token): Cookie {
     val cookie = Cookie(name, token.token)
     cookie.isHttpOnly = true
-    cookie.maxAge = token.expired.time.toInt()
+    cookie.maxAge = token.expired
     cookie.secure = environment == "product"
     cookie.path = "/"
     cookie.domain = this.cookieDomain

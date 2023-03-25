@@ -46,7 +46,7 @@ class JwtProvider {
       .setExpiration(expired)
       .compact()
 
-    return Token(token, expired)
+    return Token(token, type.expired.toInt())
   }
 
   fun createPayload(id: String, role: Role): Map<String, Any> {
