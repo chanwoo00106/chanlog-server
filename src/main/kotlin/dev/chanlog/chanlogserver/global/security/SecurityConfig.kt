@@ -2,7 +2,8 @@ package dev.chanlog.chanlogserver.global.security
 
 import dev.chanlog.chanlogserver.global.security.auth.provider.AccessAuthenticationProvider
 import dev.chanlog.chanlogserver.global.security.auth.provider.RefreshAuthenticationProvider
-import dev.chanlog.chanlogserver.global.security.filter.JwtFilter
+import dev.chanlog.chanlogserver.global.security.filter.AccessFilter
+import dev.chanlog.chanlogserver.global.security.filter.RefreshFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -48,17 +49,16 @@ class SecurityConfig {
 
       .requestMatchers(HttpMethod.POST, "/image").hasRole("ADMIN")
 
+      .requestMatchers(HttpMethod.GET, "/test").authenticated()
+
       .anyRequest().denyAll()
 
 //    http.exceptionHandling()
 //      .authenticationEntryPoint()
 
     http
-      .authenticationManager(authenticationManager)
-      .authenticationProvider(accessAuthenticationProvider)
-      .authenticationProvider(refreshAuthenticationProvider)
-
-    http.addFilterBefore(JwtFilter(authenticationManager), UsernamePasswordAuthenticationFilter::class.java)
+      .addFilterBefore(AccessFilter(authenticationManager), UsernamePasswordAuthenticationFilter::class.java)
+      .addFilterAfter(RefreshFilter(authenticationManager), AccessFilter::class.java)
 
     return http.build()
   }
