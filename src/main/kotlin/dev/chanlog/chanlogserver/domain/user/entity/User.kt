@@ -25,7 +25,7 @@ class User (
   @OneToMany(mappedBy = "user")
   val blogs: MutableList<Blog>,
 
-  @OneToMany
-  @JoinColumn(name = "user_id")
-  val refreshTokens: MutableList<Refresh>
+  @OneToOne
+  @JoinColumn(name = "refresh_id")
+  val refreshToken: Refresh
 )
