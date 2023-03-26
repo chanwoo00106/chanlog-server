@@ -25,7 +25,7 @@ class User (
   @OneToMany(mappedBy = "user")
   val blogs: MutableList<Blog>,
 
-  @OneToMany
-  @JoinColumn(name = "user_id")
-  val refreshTokens: MutableList<Refresh>
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "refresh_id")
+  var refreshToken: Refresh?
 )

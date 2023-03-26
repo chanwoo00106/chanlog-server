@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 @Entity
 class Refresh (
   @Column(name = "refresh_token", unique = true)
-  val token: String,
+  var token: String,
 ) {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long = 0
