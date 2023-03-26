@@ -36,6 +36,8 @@ class SigninServiceImpl(
 
     val tokens = createJwtToken(user)
 
+    saveRefresh(tokens.refreshJwt, user)
+
     val accessToken = createCookie("accessToken", tokens.accessJwt)
     val refreshToken = createCookie("refreshToken", tokens.refreshJwt)
 
@@ -56,9 +58,19 @@ class SigninServiceImpl(
     val accessJwt = jwtProvider.createToken(TokenType.ACCESS, payload)
     val refreshJwt = jwtProvider.createToken(TokenType.REFRESH, payload)
 
-    refreshRepository.save(Refresh(refreshJwt.token))
-
     return CreateJwtTokenDto(accessJwt, refreshJwt)
+  }
+
+  private fun saveRefresh(token: Token, user: User) {
+    val refresh = Refresh(token.token)
+    user.refreshToken?.let {
+      user.refreshToken = null
+      userRepository.save(user)
+      refreshRepository.delete(it)
+    }
+
+    user.refreshToken = refreshRepository.save(refresh)
+    userRepository.save(user)
   }
 
   private fun createCookie(name: String, token: Token): Cookie {
