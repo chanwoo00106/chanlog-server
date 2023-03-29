@@ -2,7 +2,7 @@ package dev.chanlog.chanlogserver.domain.auth.service.impl
 
 import dev.chanlog.chanlogserver.domain.auth.dto.dto.CreateJwtTokenDto
 import dev.chanlog.chanlogserver.domain.auth.dto.request.SigninRequestDto
-import dev.chanlog.chanlogserver.domain.auth.dto.response.SigninResponseDto
+import dev.chanlog.chanlogserver.domain.auth.dto.response.CookiesResponseDto
 import dev.chanlog.chanlogserver.domain.auth.entity.Refresh
 import dev.chanlog.chanlogserver.domain.auth.repository.RefreshRepository
 import dev.chanlog.chanlogserver.domain.auth.service.SigninService
@@ -17,7 +17,6 @@ import jakarta.servlet.http.Cookie
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.Date
 
 @Service
 class SigninServiceImpl(
@@ -31,7 +30,7 @@ class SigninServiceImpl(
   @Value("\${environment}")
   private lateinit var environment: String
 
-  override fun execute(data: SigninRequestDto): SigninResponseDto {
+  override fun execute(data: SigninRequestDto): CookiesResponseDto {
     val user = userCheck(data)
 
     val tokens = createJwtToken(user)
@@ -41,7 +40,7 @@ class SigninServiceImpl(
     val accessToken = createCookie("accessToken", tokens.accessJwt)
     val refreshToken = createCookie("refreshToken", tokens.refreshJwt)
 
-    return SigninResponseDto(accessToken, refreshToken)
+    return CookiesResponseDto(accessToken, refreshToken)
   }
 
   private fun userCheck(data: SigninRequestDto): User {
@@ -53,7 +52,7 @@ class SigninServiceImpl(
     return user
   }
 
-  private fun createJwtToken(user: User): CreateJwtTokenDto {
+  fun createJwtToken(user: User): CreateJwtTokenDto {
     val payload = jwtProvider.createPayload(user.id, user.role)
     val accessJwt = jwtProvider.createToken(TokenType.ACCESS, payload)
     val refreshJwt = jwtProvider.createToken(TokenType.REFRESH, payload)
@@ -61,7 +60,7 @@ class SigninServiceImpl(
     return CreateJwtTokenDto(accessJwt, refreshJwt)
   }
 
-  private fun saveRefresh(token: Token, user: User) {
+  fun saveRefresh(token: Token, user: User) {
     val refresh = Refresh(token.token)
     user.refreshToken?.let {
       user.refreshToken = null
@@ -73,7 +72,7 @@ class SigninServiceImpl(
     userRepository.save(user)
   }
 
-  private fun createCookie(name: String, token: Token): Cookie {
+  fun createCookie(name: String, token: Token): Cookie {
     val cookie = Cookie(name, token.token)
     cookie.isHttpOnly = true
     cookie.maxAge = token.expired
