@@ -16,7 +16,7 @@ class RefreshAuthenticationProvider(
 ): AuthenticationProvider {
 
   override fun authenticate(authentication: Authentication): Authentication {
-    val claims = jwtProvider.parseToken(TokenType.ACCESS, authentication.name)
+    val claims = jwtProvider.parseToken(TokenType.REFRESH, authentication.name)
 
     val user = userDetailsService.loadUserByUsername(claims)
 
