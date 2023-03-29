@@ -1,8 +1,10 @@
 package dev.chanlog.chanlogserver.global.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import dev.chanlog.chanlogserver.global.security.auth.provider.AccessAuthenticationProvider
 import dev.chanlog.chanlogserver.global.security.auth.provider.RefreshAuthenticationProvider
 import dev.chanlog.chanlogserver.global.security.filter.AccessFilter
+import dev.chanlog.chanlogserver.global.security.filter.ExceptionFilter
 import dev.chanlog.chanlogserver.global.security.filter.RefreshFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,7 +28,8 @@ class SecurityConfig {
     http: HttpSecurity,
     authenticationManager: AuthenticationManager,
     accessAuthenticationProvider: AccessAuthenticationProvider,
-    refreshAuthenticationProvider: RefreshAuthenticationProvider
+    refreshAuthenticationProvider: RefreshAuthenticationProvider,
+    objectMapper: ObjectMapper
   ): SecurityFilterChain {
     http.cors().and()
       .csrf().disable()
@@ -54,9 +57,11 @@ class SecurityConfig {
 //    http.exceptionHandling()
 //      .authenticationEntryPoint()
 
+    // ExceptionFilter -> AccessFilter -> RefreshFilter
     http
       .addFilterBefore(AccessFilter(authenticationManager), UsernamePasswordAuthenticationFilter::class.java)
       .addFilterAfter(RefreshFilter(authenticationManager), AccessFilter::class.java)
+      .addFilterBefore(ExceptionFilter(objectMapper), AccessFilter::class.java)
 
     return http.build()
   }
