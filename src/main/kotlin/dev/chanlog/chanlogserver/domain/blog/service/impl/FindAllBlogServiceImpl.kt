@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service
 class FindAllBlogServiceImpl(
   private val blogRepository: BlogRepository
 ): FindAllBlogService {
-  override fun execute(page: Int): List<Blog>
-    = blogRepository.findAll(PageRequest.of(page * 30, (page + 1) * 30)).toList()
+  override fun execute(page: Int, title: String?): List<Blog>
+    = blogRepository.findAllByTitle(PageRequest.of(page * 30, (page + 1) * 30), title).toList()
 }

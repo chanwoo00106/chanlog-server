@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface BlogRepository: JpaRepository<Blog, String> {
-  override fun findAll(page: Pageable): Page<Blog>
+  fun findAllByTitle(page: Pageable, title: String?): Page<Blog>
 }
