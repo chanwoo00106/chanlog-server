@@ -27,7 +27,6 @@ class BlogController(
       findAllBlogService.execute(page, title)
 
   @PostMapping
-  fun createBlog(@RequestBody @Valid data: CreateBlogRequestDto, authentication: Authentication) {
-    createBlogService.execute(data, authentication)
-  }
+  fun createBlog(@RequestBody @Valid data: CreateBlogRequestDto, authentication: Authentication)
+    = createBlogService.execute(data, authentication)
 }
