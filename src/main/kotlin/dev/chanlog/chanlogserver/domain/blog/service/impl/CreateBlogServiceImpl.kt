@@ -21,6 +21,7 @@ class CreateBlogServiceImpl(
   val blogRepository: BlogRepository
 ): CreateBlogService {
   override fun execute(data: CreateBlogRequestDto, authentication: Authentication): CreateBlogResponseDto {
+    checkBlog(data.title)
     val user = findUser(authentication.name)
     val content = createContent(data.content)
     val blog = createBlog(data, user, content)
@@ -30,6 +31,11 @@ class CreateBlogServiceImpl(
 
   private fun findUser(id: String)
     = userRepository.findById(id).orElseThrow { BasicException(ErrorCode.INVALID_TOKEN) }
+
+  private fun checkBlog(title: String) {
+    val blog = blogRepository.findById(title).isEmpty
+    if (!blog) throw BasicException(ErrorCode.ALREADY_EXIST_BLOG)
+  }
 
   private fun createContent(content: String)
     = contentRepository.save(Content(content))
