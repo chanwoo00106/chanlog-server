@@ -1,4 +1,4 @@
-package dev.chanlog.chanlogserver
+package dev.chanlogserver
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class ChanlogServerApplicationTests {
 
-  @Test
-  fun contextLoads() {
-  }
+	@Test
+	fun contextLoads() {
+	}
 
 }
