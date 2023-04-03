@@ -1,6 +1,7 @@
 package dev.chanlogserver.global.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dev.chanlogserver.global.security.exception.AccessDeniedHandler
 import dev.chanlogserver.global.security.exception.CustomAuthenticationEntryPoint
 import dev.chanlogserver.global.security.filter.ExceptionFilter
 import org.springframework.context.annotation.Bean
@@ -49,6 +50,7 @@ class SecurityConfig (
 
       .exceptionHandling()
       .authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper))
+      .accessDeniedHandler(AccessDeniedHandler(objectMapper))
       .and()
 
       .build()
