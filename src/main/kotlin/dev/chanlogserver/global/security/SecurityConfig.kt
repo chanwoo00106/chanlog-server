@@ -25,6 +25,7 @@ class SecurityConfig {
       .authorizeHttpRequests()
 
       .requestMatchers(HttpMethod.GET, "/test").permitAll()
+      .requestMatchers(HttpMethod.POST, "/test").permitAll()
 
       .requestMatchers(HttpMethod.POST, "/auth").permitAll()
       .requestMatchers(HttpMethod.PATCH, "/auth").authenticated()
