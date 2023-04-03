@@ -14,14 +14,16 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 class SecurityConfig {
   @Bean
-  fun filterChain(http: HttpSecurity): SecurityFilterChain {
-    http
+  fun filterChain(http: HttpSecurity): SecurityFilterChain
+    = http
       .csrf().disable()
       .httpBasic().disable()
       .formLogin().disable()
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .and()
 
-    http.authorizeHttpRequests()
+      .authorizeHttpRequests()
+
       .requestMatchers(HttpMethod.GET, "/test").permitAll()
 
       .requestMatchers(HttpMethod.POST, "/auth").permitAll()
@@ -35,10 +37,9 @@ class SecurityConfig {
 
       .requestMatchers(HttpMethod.POST, "/image").hasRole("ADMIN")
 
-      .anyRequest().denyAll()
+      .anyRequest().permitAll()
 
-    return http.build()
-  }
+      .and().build()
 
   @Bean
   fun passwordEncoder(): PasswordEncoder
