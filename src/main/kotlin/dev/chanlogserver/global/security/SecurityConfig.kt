@@ -1,6 +1,7 @@
 package dev.chanlogserver.global.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dev.chanlogserver.global.security.exception.CustomAuthenticationEntryPoint
 import dev.chanlogserver.global.security.filter.ExceptionFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -45,6 +46,10 @@ class SecurityConfig (
       .anyRequest().permitAll().and()
 
       .addFilterBefore(ExceptionFilter(objectMapper), UsernamePasswordAuthenticationFilter::class.java)
+
+      .exceptionHandling()
+      .authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper))
+      .and()
 
       .build()
 
