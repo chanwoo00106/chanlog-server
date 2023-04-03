@@ -17,4 +17,13 @@ class GlobalException {
     val responseBody = ExceptionResponse(HttpStatus.BAD_REQUEST.value(), request.requestURI, exception.bindingResult.allErrors[0].defaultMessage)
     return ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
   }
+
+  @ExceptionHandler(BasicException::class)
+  fun basicException(
+    request: HttpServletRequest,
+    exception: BasicException
+  ): ResponseEntity<ExceptionResponse> {
+    val responseBody = ExceptionResponse(exception.status, request.requestURI, exception.message)
+    return ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
+  }
 }
