@@ -4,5 +4,5 @@ import jakarta.validation.constraints.NotBlank
 
 data class SayHelloRequest (
   @field:NotBlank(message = "not null")
-  val test: String
+  val test: String?
 )
