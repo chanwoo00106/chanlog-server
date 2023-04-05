@@ -15,7 +15,7 @@ data class User (
   @Id
   val email: String,
 
-  @Column(nullable = false, length = 20)
+  @Column(nullable = false)
   val password: String,
 
   @Column(nullable = false, length = 20)
@@ -28,7 +28,7 @@ data class User (
   @Column(nullable = false)
   val role: Role,
 
-  @OneToOne
+  @OneToOne(mappedBy = "user")
   val refresh: Refresh
 ) {
   @OneToMany(mappedBy = "user")

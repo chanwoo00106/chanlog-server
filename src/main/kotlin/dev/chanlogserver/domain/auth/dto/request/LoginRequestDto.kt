@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank
 
 data class LoginRequestDto (
   @field:NotBlank
-  private val email: String?,
+  val email: String,
 
   @field:NotBlank
-  private val password: String?
+  val password: String
 )

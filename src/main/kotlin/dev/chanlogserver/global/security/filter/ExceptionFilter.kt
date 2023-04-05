@@ -25,10 +25,11 @@ class ExceptionFilter(
   }
 
   private fun sendError(req: HttpServletRequest, res: HttpServletResponse, errorCode: ErrorCode) {
-        val errorResponse = ExceptionResponse(errorCode.status, req.requestURI, errorCode.message)
-        val responseString = objectMapper.writeValueAsString(errorResponse)
-        res.status = errorCode.status
-        res.contentType = MediaType.APPLICATION_JSON_VALUE
-        res.writer.write(responseString)
-    }
+    val errorResponse = ExceptionResponse(errorCode.status, req.requestURI, errorCode.message)
+    val responseString = objectMapper.writeValueAsString(errorResponse)
+    res.status = errorCode.status
+    res.characterEncoding = "UTF-8"
+    res.contentType = MediaType.APPLICATION_JSON_VALUE
+    res.writer.write(responseString)
+  }
 }
