@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: test
   jpa:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
