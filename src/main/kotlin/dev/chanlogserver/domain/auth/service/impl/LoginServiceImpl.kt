@@ -67,7 +67,7 @@ class LoginServiceImpl(
     userRepository.save(user)
   }
 
-  private fun createCookie(tokenType: TokenType, token: TokenDto): Cookie {
+  fun createCookie(tokenType: TokenType, token: TokenDto): Cookie {
     val cookie = Cookie(tokenType.type, token.token)
     cookie.maxAge = token.expired
     cookie.domain = cookieDomain
