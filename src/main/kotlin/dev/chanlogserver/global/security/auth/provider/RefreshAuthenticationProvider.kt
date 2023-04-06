@@ -9,7 +9,9 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.stereotype.Component
 
+@Component
 class RefreshAuthenticationProvider(
   private val jwtProvider: JwtProvider,
   private val userDetailsService: UserDetailsService
@@ -23,5 +25,6 @@ class RefreshAuthenticationProvider(
     return UsernamePasswordAuthenticationToken(userDetails.username, userDetails.password, userDetails.authorities)
   }
 
-  override fun supports(authentication: Class<*>) = RefreshAuthentication::class == authentication::class
+  override fun supports(authentication: Class<*>)
+    = RefreshAuthentication::class.java.isAssignableFrom(authentication)
 }

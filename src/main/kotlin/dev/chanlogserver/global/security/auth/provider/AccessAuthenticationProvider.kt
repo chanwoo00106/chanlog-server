@@ -24,7 +24,6 @@ class AccessAuthenticationProvider(
     return UsernamePasswordAuthenticationToken(data["id"], null, mutableListOf(Role.valueOf(data["role"])))
   }
 
-  override fun supports(authentication: Class<*>): Boolean {
-    return AccessAuthentication::class == authentication::class
-  }
+  override fun supports(authentication: Class<*>)
+    = AccessAuthentication::class.java.isAssignableFrom(authentication)
 }
