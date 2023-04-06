@@ -9,10 +9,10 @@ enum class Role: GrantedAuthority {
 
   companion object {
     fun valueOf(value: Any?): Role? {
-      if (!arrayListOf(ROLE_USER, ROLE_ADMIN).contains(value))
+      if (!arrayListOf(ROLE_USER.name, ROLE_ADMIN.name).contains(value))
         return null
 
-      return Role.valueOf(value)
+      return Role.valueOf(value.toString())
     }
   }
 }
