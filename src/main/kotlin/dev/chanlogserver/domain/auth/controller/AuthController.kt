@@ -4,6 +4,8 @@ import dev.chanlogserver.domain.auth.dto.request.LoginRequestDto
 import dev.chanlogserver.domain.auth.service.LoginService
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
+import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,5 +21,10 @@ class AuthController(
     val cookies = loginService.execute(body)
     response.addCookie(cookies.access)
     response.addCookie(cookies.refresh)
+  }
+
+  @PatchMapping
+  fun reissue(authentication: Authentication, response: HttpServletResponse) {
+
   }
 }
