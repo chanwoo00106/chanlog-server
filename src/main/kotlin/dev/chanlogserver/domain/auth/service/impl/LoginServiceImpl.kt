@@ -15,22 +15,26 @@ import jakarta.servlet.http.Cookie
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class LoginServiceImpl(
   private val userRepository: UserRepository,
   private val passwordEncoder: PasswordEncoder,
-  private val jwtProvider: JwtProvider
+  private val jwtProvider: JwtProvider,
 ): LoginService {
   @Value("\${jwt.domain}")
   private lateinit var cookieDomain: String
   @Value("\${environment}")
   private lateinit var environment: String
 
+  @Transactional
   override fun execute(body: LoginRequestDto): LoginResponseDto {
     val user = findUserAndCheck(body)
 
     val tokens = createTokens(user)
+
+    refreshTokenSave(tokens.refresh.token, user)
 
     return LoginResponseDto(
       createCookie(TokenType.ACCESS, tokens.access),
@@ -58,7 +62,12 @@ class LoginServiceImpl(
     )
   }
 
-  fun createCookie(tokenType: TokenType, token: TokenDto): Cookie {
+  fun refreshTokenSave(refreshToken: String, user: User) {
+    user.refresh.token = refreshToken
+    userRepository.save(user)
+  }
+
+  private fun createCookie(tokenType: TokenType, token: TokenDto): Cookie {
     val cookie = Cookie(tokenType.type, token.token)
     cookie.maxAge = token.expired
     cookie.domain = cookieDomain
