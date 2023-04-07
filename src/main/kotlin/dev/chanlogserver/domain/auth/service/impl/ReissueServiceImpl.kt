@@ -1,7 +1,7 @@
 package dev.chanlogserver.domain.auth.service.impl
 
 import dev.chanlogserver.domain.auth.dto.request.ReissueRequestDto
-import dev.chanlogserver.domain.auth.dto.response.LoginResponseDto
+import dev.chanlogserver.domain.auth.dto.response.CookieResponseDto
 import dev.chanlogserver.domain.auth.service.ReissueService
 import dev.chanlogserver.domain.user.User
 import dev.chanlogserver.domain.user.repository.UserRepository
@@ -15,7 +15,7 @@ class ReissueServiceImpl(
   private val userRepository: UserRepository,
   private val loginServiceImpl: LoginServiceImpl,
 ): ReissueService {
-  override fun execute(data: ReissueRequestDto): LoginResponseDto {
+  override fun execute(data: ReissueRequestDto): CookieResponseDto {
     val user = checkRefreshTokenAndFindUser(data)
 
     val tokens = loginServiceImpl.createTokens(user)
@@ -25,7 +25,7 @@ class ReissueServiceImpl(
     val accessCookie = loginServiceImpl.createCookie(TokenType.ACCESS, tokens.access)
     val refreshCookie = loginServiceImpl.createCookie(TokenType.REFRESH, tokens.refresh)
 
-    return LoginResponseDto(accessCookie, refreshCookie)
+    return CookieResponseDto(accessCookie, refreshCookie)
   }
 
   fun checkRefreshTokenAndFindUser(data: ReissueRequestDto): User {
