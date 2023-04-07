@@ -3,6 +3,7 @@ package dev.chanlogserver.domain.auth.service.impl
 import dev.chanlogserver.domain.auth.dto.request.LogoutRequestDto
 import dev.chanlogserver.domain.auth.dto.response.CookieResponseDto
 import dev.chanlogserver.domain.auth.service.LogoutService
+import dev.chanlogserver.domain.user.User
 import dev.chanlogserver.domain.user.repository.UserRepository
 import dev.chanlogserver.global.exception.BasicException
 import dev.chanlogserver.global.exception.ErrorCode
@@ -21,7 +22,9 @@ class LogoutServiceImpl(
   private lateinit var environment: String
 
   override fun execute(data: LogoutRequestDto): CookieResponseDto {
-    userCheck(data.authentication.name)
+    val user = userCheck(data.authentication.name)
+
+    deleteRefresh(user)
 
     return CookieResponseDto(
       createCookie(TokenType.ACCESS),
@@ -29,9 +32,13 @@ class LogoutServiceImpl(
     )
   }
 
-  private fun userCheck(email: String) {
-    userRepository.findById(email)
+  private fun userCheck(email: String)
+    = userRepository.findById(email)
       .orElseThrow { BasicException(ErrorCode.INVALID_TOKEN) }
+
+  private fun deleteRefresh(user: User) {
+    user.refresh.token = null
+    userRepository.save(user)
   }
 
   private fun createCookie(tokenType: TokenType): Cookie {
