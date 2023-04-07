@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.CookieValue
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -32,5 +33,10 @@ class AuthController(
     val cookies = reissueService.execute(ReissueRequestDto(authentication, refreshToken))
     response.addCookie(cookies.access)
     response.addCookie(cookies.refresh)
+  }
+
+  @DeleteMapping
+  fun logout(authentication: Authentication) {
+
   }
 }
