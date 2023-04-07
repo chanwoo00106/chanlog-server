@@ -1,8 +1,10 @@
 package dev.chanlogserver.domain.auth.controller
 
 import dev.chanlogserver.domain.auth.dto.request.LoginRequestDto
+import dev.chanlogserver.domain.auth.dto.request.LogoutRequestDto
 import dev.chanlogserver.domain.auth.dto.request.ReissueRequestDto
 import dev.chanlogserver.domain.auth.service.LoginService
+import dev.chanlogserver.domain.auth.service.LogoutService
 import dev.chanlogserver.domain.auth.service.ReissueService
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
@@ -19,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/auth")
 class AuthController(
   private val loginService: LoginService,
-  private val reissueService: ReissueService
+  private val reissueService: ReissueService,
+  private val logoutService: LogoutService
 ) {
   @PostMapping
   fun login(@RequestBody @Valid body: LoginRequestDto, response: HttpServletResponse) {
@@ -36,7 +39,10 @@ class AuthController(
   }
 
   @DeleteMapping
-  fun logout(authentication: Authentication) {
+  fun logout(authentication: Authentication, response: HttpServletResponse) {
+    val cookies = logoutService.execute(LogoutRequestDto(authentication))
 
+    response.addCookie(cookies.access)
+    response.addCookie(cookies.refresh)
   }
 }
