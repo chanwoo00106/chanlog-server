@@ -3,7 +3,7 @@ package dev.chanlogserver.domain.auth.service.impl
 import dev.chanlogserver.domain.auth.dto.dto.TokenDto
 import dev.chanlogserver.domain.auth.dto.dto.Tokens
 import dev.chanlogserver.domain.auth.dto.request.LoginRequestDto
-import dev.chanlogserver.domain.auth.dto.response.LoginResponseDto
+import dev.chanlogserver.domain.auth.dto.response.CookieResponseDto
 import dev.chanlogserver.domain.auth.service.LoginService
 import dev.chanlogserver.domain.user.User
 import dev.chanlogserver.domain.user.repository.UserRepository
@@ -29,14 +29,14 @@ class LoginServiceImpl(
   private lateinit var environment: String
 
   @Transactional
-  override fun execute(body: LoginRequestDto): LoginResponseDto {
+  override fun execute(body: LoginRequestDto): CookieResponseDto {
     val user = findUserAndCheck(body)
 
     val tokens = createTokens(user)
 
     refreshTokenSave(tokens.refresh.token, user)
 
-    return LoginResponseDto(
+    return CookieResponseDto(
       createCookie(TokenType.ACCESS, tokens.access),
       createCookie(TokenType.REFRESH, tokens.refresh)
     )
