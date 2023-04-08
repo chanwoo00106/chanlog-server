@@ -27,11 +27,11 @@ class CreateBlogServiceImpl(
 
     checkDuplicateBlogTitle(data.title, user)
 
-    saveImages(data.images)
-
     val blog = createBlog(data, user)
 
-    return CreateResponseDto(blog.title, blog.thumbnail, blog.content.content, blog.createdAt)
+    val images = saveImages(data.images, blog)
+
+    return CreateResponseDto(blog.title, blog.thumbnail, blog.content.content, blog.createdAt, images)
   }
 
   private fun findUser(email: String)
@@ -43,15 +43,12 @@ class CreateBlogServiceImpl(
     if (blog != null) throw BasicException(ErrorCode.DUPLICATE_BLOG_TITLE)
   }
 
-  private fun saveImages(images: List<ImageDto>) {
-    imageRepository.saveAll(
-      images.map { image -> Image(image.image) }
-    )
-  }
+  private fun saveImages(images: List<ImageDto>, blog: Blog)
+    = imageRepository.saveAll(images.map { i -> Image(i.image, blog) })
 
   private fun createBlog(data: CreateRequestDto, user: User): Blog {
     val content = contentRepository.save(Content(data.content))
-    val newBlog = Blog(data.title, data.thumbnail, content, user)
+    val newBlog = Blog(data.title, data.thumbnail, content, user, mutableListOf())
 
     return blogRepository.save(newBlog)
   }
