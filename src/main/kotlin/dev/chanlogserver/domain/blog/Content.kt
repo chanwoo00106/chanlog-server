@@ -1,14 +1,12 @@
 package dev.chanlogserver.domain.blog
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity
 data class Content (
   @Column(nullable = false)
   val content: String
 ) {
-  @Id
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long = 0
 }
