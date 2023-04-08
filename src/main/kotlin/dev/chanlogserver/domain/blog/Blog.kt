@@ -19,6 +19,9 @@ class Blog (
   @ManyToOne
   @JoinColumn(name = "user_id")
   val user: User,
+
+  @OneToMany(mappedBy = "blog")
+  val images: MutableList<Image>
 ) {
   @Column(name = "created_at", nullable = false)
   val createdAt: LocalTime = LocalTime.now()
