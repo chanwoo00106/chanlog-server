@@ -5,9 +5,11 @@ import dev.chanlogserver.domain.blog.service.CreateBlogService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -20,4 +22,13 @@ class BlogController(
   @ResponseStatus(value = HttpStatus.CREATED)
   fun create(@RequestBody @Valid body: CreateRequestDto, authentication: Authentication)
     = createBlogService.execute(authentication.name, body)
+
+  @GetMapping
+  fun findBlog(
+    @RequestParam("title") title: String?,
+    @RequestParam("page") page: Int?,
+    @RequestParam("email") email: String?
+  ) {
+
+  }
 }
