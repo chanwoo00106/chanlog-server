@@ -20,6 +20,7 @@ class ExceptionFilter(
     } catch (e: BasicException) {
       sendError(request, response, ErrorCode.INVALID_TOKEN)
     } catch (e: Exception) {
+      println(e)
       sendError(request, response, ErrorCode.INTERNAL_ERROR)
     }
   }
