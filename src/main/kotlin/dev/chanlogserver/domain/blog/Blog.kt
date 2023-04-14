@@ -3,7 +3,8 @@ package dev.chanlogserver.domain.blog
 import dev.chanlogserver.domain.image.Image
 import dev.chanlogserver.domain.user.User
 import jakarta.persistence.*
-import java.time.LocalTime
+import org.springframework.data.annotation.CreatedDate
+import java.time.LocalDateTime
 
 @Entity
 class Blog (
@@ -24,8 +25,8 @@ class Blog (
   val images: MutableList<Image>
 ) {
   @Column(name = "created_at", nullable = false)
-  val createdAt: LocalTime = LocalTime.now()
+  val createdAt: LocalDateTime = LocalDateTime.now()
 
   @Column(name = "updated_at", nullable = true)
-  var updatedAt: LocalTime? = null
+  var updatedAt: LocalDateTime? = null
 }
