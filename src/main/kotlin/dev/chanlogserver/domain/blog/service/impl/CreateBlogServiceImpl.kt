@@ -48,7 +48,7 @@ class CreateBlogServiceImpl(
 
   private fun createBlog(data: CreateRequestDto, user: User): Blog {
     val content = contentRepository.save(Content(data.content))
-    val newBlog = Blog(data.title, data.thumbnail, content, user, mutableListOf())
+    val newBlog = Blog(data.title, data.thumbnail, content, user, mutableListOf(), null)
 
     return blogRepository.save(newBlog)
   }
