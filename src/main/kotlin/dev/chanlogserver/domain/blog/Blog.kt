@@ -7,7 +7,7 @@ import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
 
 @Entity
-class Blog (
+class Blog(
   @Id
   val title: String,
 
@@ -22,10 +22,12 @@ class Blog (
   val user: User,
 
   @OneToMany(mappedBy = "blog")
-  val images: MutableList<Image>
+  val images: MutableList<Image>,
+
+  private val created: LocalDateTime?
 ) {
   @Column(name = "created_at", nullable = false)
-  val createdAt: LocalDateTime = LocalDateTime.now()
+  val createdAt: LocalDateTime = if (created == null) LocalDateTime.now() else this.created
 
   @Column(name = "updated_at", nullable = true)
   var updatedAt: LocalDateTime? = null

@@ -5,7 +5,7 @@ import jakarta.persistence.*
 @Entity
 data class Content (
   @Column(nullable = false)
-  val content: String
+  var content: String
 ) {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long = 0

@@ -5,8 +5,10 @@ import dev.chanlogserver.domain.blog.dto.request.CreateRequestDto
 import dev.chanlogserver.domain.blog.dto.request.FindBlogRequestDto
 import dev.chanlogserver.domain.blog.dto.request.ModifyBlogRequestDto
 import dev.chanlogserver.domain.blog.dto.response.FindBlogResponseDto
+import dev.chanlogserver.domain.blog.dto.response.ModifyBlogResponseDto
 import dev.chanlogserver.domain.blog.service.CreateBlogService
 import dev.chanlogserver.domain.blog.service.FindBlogService
+import dev.chanlogserver.domain.blog.service.ModifyBlogService
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import org.springframework.data.domain.Page
@@ -27,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController
 @Validated
 class BlogController(
   private val createBlogService: CreateBlogService,
-  private val findBlogService: FindBlogService
+  private val findBlogService: FindBlogService,
+  private val modifyBlogService: ModifyBlogService
 ) {
   @PostMapping
   @ResponseStatus(value = HttpStatus.CREATED)
@@ -47,5 +50,7 @@ class BlogController(
   fun modifyBlog(
     @RequestParam("title") @NotEmpty(message = "title은 필수값입니다") title: String,
     @RequestBody @Valid body: ModifyBlogRequestDto
-  ) {}
+  ): ModifyBlogResponseDto {
+    return modifyBlogService.execute(title, body)
+  }
 }

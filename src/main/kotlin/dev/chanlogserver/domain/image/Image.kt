@@ -5,7 +5,7 @@ import jakarta.persistence.*
 
 @Entity
 data class Image (
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   val url: String,
 
   @ManyToOne
