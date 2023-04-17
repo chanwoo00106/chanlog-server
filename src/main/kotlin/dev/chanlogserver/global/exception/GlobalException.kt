@@ -1,6 +1,7 @@
 package dev.chanlogserver.global.exception
 
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -24,6 +25,15 @@ class GlobalException {
     exception: BasicException
   ): ResponseEntity<ExceptionResponse> {
     val responseBody = ExceptionResponse(exception.status, request.requestURI, exception.message)
+    return ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
+  }
+
+  @ExceptionHandler(ConstraintViolationException::class)
+  fun constraintException(
+    request: HttpServletRequest,
+    exception: ConstraintViolationException
+  ): ResponseEntity<ExceptionResponse> {
+    val responseBody = ExceptionResponse(HttpStatus.BAD_REQUEST.value(), request.requestURI, exception.message)
     return ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
   }
 }
