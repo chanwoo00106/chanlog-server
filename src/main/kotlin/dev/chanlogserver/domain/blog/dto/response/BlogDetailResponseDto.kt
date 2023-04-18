@@ -5,7 +5,7 @@ import dev.chanlogserver.domain.blog.dto.dto.ImageDto
 import dev.chanlogserver.domain.blog.dto.dto.UserDto
 
 data class BlogDetailResponseDto (
-  val blog: Blog
+  private val blog: Blog
 ) {
   val title = blog.title
   val content = blog.content.content
