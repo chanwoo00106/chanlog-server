@@ -1,16 +1,10 @@
 package dev.chanlogserver.domain.blog.controller
 
 import dev.chanlogserver.domain.blog.Blog
-import dev.chanlogserver.domain.blog.dto.request.CreateRequestDto
-import dev.chanlogserver.domain.blog.dto.request.DeleteBlogRequestDto
-import dev.chanlogserver.domain.blog.dto.request.FindBlogRequestDto
-import dev.chanlogserver.domain.blog.dto.request.ModifyBlogRequestDto
+import dev.chanlogserver.domain.blog.dto.request.*
 import dev.chanlogserver.domain.blog.dto.response.FindBlogResponseDto
 import dev.chanlogserver.domain.blog.dto.response.ModifyBlogResponseDto
-import dev.chanlogserver.domain.blog.service.CreateBlogService
-import dev.chanlogserver.domain.blog.service.DeleteBlogService
-import dev.chanlogserver.domain.blog.service.FindBlogService
-import dev.chanlogserver.domain.blog.service.ModifyBlogService
+import dev.chanlogserver.domain.blog.service.*
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import org.springframework.data.domain.Page
@@ -19,6 +13,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,7 +29,8 @@ class BlogController(
   private val createBlogService: CreateBlogService,
   private val findBlogService: FindBlogService,
   private val modifyBlogService: ModifyBlogService,
-  private val deleteBlogService: DeleteBlogService
+  private val deleteBlogService: DeleteBlogService,
+  private val blogDetailDetailService: BlogDetailDetailService
 ) {
   @PostMapping
   @ResponseStatus(value = HttpStatus.CREATED)
@@ -64,4 +60,10 @@ class BlogController(
   ) {
     deleteBlogService.execute(DeleteBlogRequestDto(title))
   }
+
+  @GetMapping("/{title}")
+  fun detail(
+    @PathVariable("title") title: String
+  )
+    = blogDetailDetailService.execute(BlogDetailRequestDto(title))
 }
