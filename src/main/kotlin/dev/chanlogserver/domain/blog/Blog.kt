@@ -14,14 +14,14 @@ class Blog(
   @Column(nullable = false)
   val thumbnail: String,
 
-  @OneToOne
+  @OneToOne(cascade = [CascadeType.REMOVE])
   val content: Content,
 
   @ManyToOne
   @JoinColumn(name = "user_id")
   val user: User,
 
-  @OneToMany(mappedBy = "blog")
+  @OneToMany(mappedBy = "blog", cascade = [CascadeType.REMOVE])
   val images: MutableList<Image>,
 
   private val created: LocalDateTime?
