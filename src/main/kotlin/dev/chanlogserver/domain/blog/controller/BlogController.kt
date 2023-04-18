@@ -2,11 +2,13 @@ package dev.chanlogserver.domain.blog.controller
 
 import dev.chanlogserver.domain.blog.Blog
 import dev.chanlogserver.domain.blog.dto.request.CreateRequestDto
+import dev.chanlogserver.domain.blog.dto.request.DeleteBlogRequestDto
 import dev.chanlogserver.domain.blog.dto.request.FindBlogRequestDto
 import dev.chanlogserver.domain.blog.dto.request.ModifyBlogRequestDto
 import dev.chanlogserver.domain.blog.dto.response.FindBlogResponseDto
 import dev.chanlogserver.domain.blog.dto.response.ModifyBlogResponseDto
 import dev.chanlogserver.domain.blog.service.CreateBlogService
+import dev.chanlogserver.domain.blog.service.DeleteBlogService
 import dev.chanlogserver.domain.blog.service.FindBlogService
 import dev.chanlogserver.domain.blog.service.ModifyBlogService
 import jakarta.validation.Valid
@@ -31,7 +33,8 @@ import org.springframework.web.bind.annotation.RestController
 class BlogController(
   private val createBlogService: CreateBlogService,
   private val findBlogService: FindBlogService,
-  private val modifyBlogService: ModifyBlogService
+  private val modifyBlogService: ModifyBlogService,
+  private val deleteBlogService: DeleteBlogService
 ) {
   @PostMapping
   @ResponseStatus(value = HttpStatus.CREATED)
@@ -59,5 +62,6 @@ class BlogController(
   fun deleteBlog(
     @RequestParam("title") @NotEmpty(message = "title은 필수값입니다") title: String
   ) {
+    deleteBlogService.execute(DeleteBlogRequestDto(title))
   }
 }
